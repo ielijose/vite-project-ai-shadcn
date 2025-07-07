@@ -1,10 +1,10 @@
 import "./App.css";
-import { StoreManagementForm } from "./components/store-management-form";
+import { StoreManagementFormV4 } from "./components/store-management-form-v4";
 
 function App() {
   return (
     <>
-      <StoreManagementForm />
+      <StoreManagementFormV4 />
     </>
   );
 }
