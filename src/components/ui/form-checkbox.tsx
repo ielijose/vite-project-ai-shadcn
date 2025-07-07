@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./checkbox";
-import { Label } from "./label";
+import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
 
 interface FormCheckboxProps {
   name: string;
@@ -47,8 +47,8 @@ export const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProp
     };
 
     return (
-      <div className={cn("space-y-2", className)}>
-        <div className="flex items-center space-x-2">
+      <FormItem className={cn("flex flex-row items-start space-x-3 space-y-0", className)}>
+        <FormControl>
           <Checkbox
             ref={ref}
             id={name}
@@ -63,32 +63,24 @@ export const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProp
             {...(register ? register(name) : {})}
             {...props}
           />
-          
+        </FormControl>
+        
+        <div className="space-y-1 leading-none">
           {label && (
-            <Label 
-              htmlFor={name} 
-              className={cn(
-                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-                required && "after:content-['*'] after:ml-1 after:text-red-500"
-              )}
-            >
+            <FormLabel htmlFor={name} required={required}>
               {label}
-            </Label>
+            </FormLabel>
+          )}
+          
+          {description && (
+            <FormDescription id={descriptionId}>
+              {description}
+            </FormDescription>
           )}
         </div>
         
-        {description && (
-          <p id={descriptionId} className="text-sm text-muted-foreground ml-6">
-            {description}
-          </p>
-        )}
-        
-        {error && (
-          <p id={errorId} className="text-sm text-red-500 font-medium ml-6">
-            {error}
-          </p>
-        )}
-      </div>
+        <FormMessage id={errorId} error={error} />
+      </FormItem>
     );
   }
 );

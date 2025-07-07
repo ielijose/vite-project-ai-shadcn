@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "./textarea";
-import { Label } from "./label";
+import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
 
 interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
@@ -31,39 +31,37 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaPr
     const ariaDescribedBy = [errorId, descriptionId].filter(Boolean).join(" ");
 
     return (
-      <div className={cn("space-y-2", className)}>
+      <FormItem className={className}>
         {label && (
-          <Label htmlFor={name} className={cn(required && "after:content-['*'] after:ml-1 after:text-red-500")}>
+          <FormLabel htmlFor={name} required={required}>
             {label}
-          </Label>
+          </FormLabel>
         )}
         
-        <Textarea
-          ref={ref}
-          id={name}
-          name={name}
-          aria-describedby={ariaDescribedBy || undefined}
-          aria-invalid={error ? "true" : "false"}
-          className={cn(
-            error && "border-red-500 focus-visible:ring-red-500",
-            textareaClassName
-          )}
-          {...(register ? register(name) : {})}
-          {...props}
-        />
+        <FormControl>
+          <Textarea
+            ref={ref}
+            id={name}
+            name={name}
+            aria-describedby={ariaDescribedBy || undefined}
+            aria-invalid={error ? "true" : "false"}
+            className={cn(
+              error && "border-red-500 focus-visible:ring-red-500",
+              textareaClassName
+            )}
+            {...(register ? register(name) : {})}
+            {...props}
+          />
+        </FormControl>
         
         {description && (
-          <p id={descriptionId} className="text-sm text-muted-foreground">
+          <FormDescription id={descriptionId}>
             {description}
-          </p>
+          </FormDescription>
         )}
         
-        {error && (
-          <p id={errorId} className="text-sm text-red-500 font-medium">
-            {error}
-          </p>
-        )}
-      </div>
+        <FormMessage id={errorId} error={error} />
+      </FormItem>
     );
   }
 );

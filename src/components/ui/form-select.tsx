@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Label } from "./label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
 
 interface SelectOption {
   value: string;
@@ -56,50 +56,48 @@ export const FormSelect = React.forwardRef<HTMLButtonElement, FormSelectProps>(
     };
 
     return (
-      <div className={cn("space-y-2", className)}>
+      <FormItem className={className}>
         {label && (
-          <Label htmlFor={name} className={cn(required && "after:content-['*'] after:ml-1 after:text-red-500")}>
+          <FormLabel htmlFor={name} required={required}>
             {label}
-          </Label>
+          </FormLabel>
         )}
         
-        <Select
-          value={value}
-          onValueChange={handleValueChange}
-          {...(register ? register(name) : {})}
-        >
-          <SelectTrigger 
-            ref={ref}
-            id={name}
-            aria-describedby={ariaDescribedBy || undefined}
-            aria-invalid={error ? "true" : "false"}
-            className={cn(
-              error && "border-red-500 focus-visible:ring-red-500"
-            )}
+        <FormControl>
+          <Select
+            value={value}
+            onValueChange={handleValueChange}
+            {...(register ? register(name) : {})}
           >
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <SelectTrigger 
+              ref={ref}
+              id={name}
+              aria-describedby={ariaDescribedBy || undefined}
+              aria-invalid={error ? "true" : "false"}
+              className={cn(
+                error && "border-red-500 focus-visible:ring-red-500"
+              )}
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormControl>
         
         {description && (
-          <p id={descriptionId} className="text-sm text-muted-foreground">
+          <FormDescription id={descriptionId}>
             {description}
-          </p>
+          </FormDescription>
         )}
         
-        {error && (
-          <p id={errorId} className="text-sm text-red-500 font-medium">
-            {error}
-          </p>
-        )}
-      </div>
+        <FormMessage id={errorId} error={error} />
+      </FormItem>
     );
   }
 );
