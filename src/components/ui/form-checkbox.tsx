@@ -2,21 +2,22 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./checkbox";
 import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
+import type { UseFormRegister, FieldValues, FieldPath } from "react-hook-form";
 
-interface FormCheckboxProps {
-  name: string;
+interface FormCheckboxProps<TFieldValues extends FieldValues = FieldValues> {
+  name: FieldPath<TFieldValues>;
   label?: string;
   description?: string;
   error?: string;
-  register?: any; // React Hook Form register function
+  register?: UseFormRegister<TFieldValues>;
   required?: boolean;
   className?: string;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }
 
-export const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProps>(
-  ({ 
+function FormCheckboxComponent<TFieldValues extends FieldValues = FieldValues>(
+  {
     name, 
     label, 
     description, 
@@ -27,7 +28,9 @@ export const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProp
     defaultChecked = false,
     onCheckedChange,
     ...props 
-  }, ref) => {
+  }: FormCheckboxProps<TFieldValues>,
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
     const errorId = error ? `${name}-error` : undefined;
     const descriptionId = description ? `${name}-description` : undefined;
     const ariaDescribedBy = [errorId, descriptionId].filter(Boolean).join(" ");
@@ -82,7 +85,8 @@ export const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProp
         <FormMessage id={errorId} error={error} />
       </FormItem>
     );
-  }
-);
+}
 
-FormCheckbox.displayName = "FormCheckbox";
+export const FormCheckbox = React.forwardRef(FormCheckboxComponent) as <TFieldValues extends FieldValues = FieldValues>(
+  props: FormCheckboxProps<TFieldValues> & { ref?: React.ForwardedRef<HTMLButtonElement> }
+) => React.ReactElement;

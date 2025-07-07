@@ -2,20 +2,22 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "./textarea";
 import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
+import type { UseFormRegister, FieldValues, FieldPath } from "react-hook-form";
 
-interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name: string;
+interface FormTextareaProps<TFieldValues extends FieldValues = FieldValues> 
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "name"> {
+  name: FieldPath<TFieldValues>;
   label?: string;
   description?: string;
   error?: string;
-  register?: any; // React Hook Form register function
+  register?: UseFormRegister<TFieldValues>;
   required?: boolean;
   className?: string;
   textareaClassName?: string;
 }
 
-export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaProps>(
-  ({ 
+function FormTextareaComponent<TFieldValues extends FieldValues = FieldValues>(
+  {
     name, 
     label, 
     description, 
@@ -25,7 +27,9 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaPr
     className,
     textareaClassName,
     ...props 
-  }, ref) => {
+  }: FormTextareaProps<TFieldValues>,
+  ref: React.ForwardedRef<HTMLTextAreaElement>
+) {
     const errorId = error ? `${name}-error` : undefined;
     const descriptionId = description ? `${name}-description` : undefined;
     const ariaDescribedBy = [errorId, descriptionId].filter(Boolean).join(" ");
@@ -63,7 +67,8 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaPr
         <FormMessage id={errorId} error={error} />
       </FormItem>
     );
-  }
-);
+}
 
-FormTextarea.displayName = "FormTextarea";
+export const FormTextarea = React.forwardRef(FormTextareaComponent) as <TFieldValues extends FieldValues = FieldValues>(
+  props: FormTextareaProps<TFieldValues> & { ref?: React.ForwardedRef<HTMLTextAreaElement> }
+) => React.ReactElement;

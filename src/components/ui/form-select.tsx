@@ -2,18 +2,19 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "./explicit-form";
+import type { UseFormRegister, FieldValues, FieldPath } from "react-hook-form";
 
 interface SelectOption {
   value: string;
   label: string;
 }
 
-interface FormSelectProps {
-  name: string;
+interface FormSelectProps<TFieldValues extends FieldValues = FieldValues> {
+  name: FieldPath<TFieldValues>;
   label?: string;
   description?: string;
   error?: string;
-  register?: any; // React Hook Form register function
+  register?: UseFormRegister<TFieldValues>;
   required?: boolean;
   className?: string;
   placeholder?: string;
@@ -22,8 +23,8 @@ interface FormSelectProps {
   onValueChange?: (value: string) => void;
 }
 
-export const FormSelect = React.forwardRef<HTMLButtonElement, FormSelectProps>(
-  ({ 
+function FormSelectComponent<TFieldValues extends FieldValues = FieldValues>(
+  {
     name, 
     label, 
     description, 
@@ -36,7 +37,9 @@ export const FormSelect = React.forwardRef<HTMLButtonElement, FormSelectProps>(
     defaultValue,
     onValueChange,
     ...props 
-  }, ref) => {
+  }: FormSelectProps<TFieldValues>,
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
     const errorId = error ? `${name}-error` : undefined;
     const descriptionId = description ? `${name}-description` : undefined;
     const ariaDescribedBy = [errorId, descriptionId].filter(Boolean).join(" ");
@@ -99,7 +102,8 @@ export const FormSelect = React.forwardRef<HTMLButtonElement, FormSelectProps>(
         <FormMessage id={errorId} error={error} />
       </FormItem>
     );
-  }
-);
+}
 
-FormSelect.displayName = "FormSelect";
+export const FormSelect = React.forwardRef(FormSelectComponent) as <TFieldValues extends FieldValues = FieldValues>(
+  props: FormSelectProps<TFieldValues> & { ref?: React.ForwardedRef<HTMLButtonElement> }
+) => React.ReactElement;
