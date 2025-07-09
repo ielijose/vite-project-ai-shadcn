@@ -1,8 +1,8 @@
-# Explicit shadcn/ui FormItem Components - AI Agent Guide
+# Enhanced shadcn/ui FormItem Components - AI Agent Guide
 
 ## Component Overview
 
-This codebase uses explicit form components that provide full control over the standard shadcn/ui form pattern. These components require manual specification of all props and accessibility attributes, eliminating "magic" behavior for maximum transparency and control.
+This codebase uses enhanced form components that adapt the shadcn/ui form pattern to align with the team's architectural preferences. These components use explicit prop specification and direct React Hook Form integration while maintaining the shadcn/ui design system.
 
 ## Available Components
 
@@ -21,9 +21,9 @@ This codebase uses explicit form components that provide full control over the s
 </FormItem>
 ```
 
-### 2. FormLabel - Explicit Label Component
+### 2. FormLabel - Enhanced Label Component
 **Location**: `src/components/ui/explicit-form.tsx:17-38`
-**Purpose**: Label component with manual `htmlFor` attribute and required indicator
+**Purpose**: Label component with explicit `htmlFor` attribute and required indicator
 
 **Props:**
 - `htmlFor`: string - ID of the associated form element (required for accessibility)
@@ -51,7 +51,7 @@ This codebase uses explicit form components that provide full control over the s
 </FormControl>
 ```
 
-### 4. FormDescription - Help Text Component
+### 4. FormDescription - Enhanced Help Text Component
 **Location**: `src/components/ui/explicit-form.tsx:53-66`
 **Purpose**: Help text component with explicit `id` prop for accessibility
 
@@ -67,7 +67,7 @@ This codebase uses explicit form components that provide full control over the s
 </FormDescription>
 ```
 
-### 5. FormMessage - Error Message Component
+### 5. FormMessage - Enhanced Error Message Component
 **Location**: `src/components/ui/explicit-form.tsx:69-93`
 **Purpose**: Error message component with explicit `id` prop and error handling
 
@@ -274,8 +274,8 @@ const {
 
 ## AI Agent Best Practices
 
-### 1. **Always Use Explicit Components for Forms**
-When creating forms, use these explicit components and manually specify all accessibility attributes.
+### 1. **Always Use Enhanced Components for Forms**
+When creating forms, use these enhanced components and specify all accessibility attributes explicitly.
 
 ### 2. **Required Accessibility Pattern**
 ALWAYS include these attributes for proper accessibility:
@@ -517,13 +517,13 @@ export function ExampleForm() {
 />
 ```
 
-### 3. **Don't Mix Standard and Explicit Components**
+### 3. **Don't Mix Standard and Enhanced Components**
 ```tsx
 // Avoid mixing patterns in the same form
 <FormField control={form.control} name="field1" render={...} />
 <FormItem>...</FormItem>
 
-// Use one pattern consistently
+// Use one pattern consistently - the enhanced approach
 <FormItem>...</FormItem>
 <FormItem>...</FormItem>
 ```
@@ -548,7 +548,7 @@ export function ExampleForm() {
 
 ## Migration Examples
 
-### From Standard shadcn/ui to Explicit Components
+### From Standard shadcn/ui to Enhanced Components
 
 **Before (Standard shadcn/ui):**
 ```tsx
@@ -568,7 +568,7 @@ export function ExampleForm() {
 />
 ```
 
-**After (Explicit Components):**
+**After (Enhanced Components):**
 ```tsx
 <FormItem>
   <FormLabel htmlFor="storeName" required>Store Name</FormLabel>
@@ -623,4 +623,4 @@ test("renders form input with label", () => {
 });
 ```
 
-Remember: These explicit components require manual setup but provide complete control and transparency. Always specify all accessibility attributes explicitly for the best accessibility and debugging experience. The extra verbosity ensures you understand exactly what's happening in your forms.
+Remember: These enhanced components use explicit prop specification to align with the team's architectural preferences. Always specify all accessibility attributes explicitly for the best accessibility and debugging experience. This approach provides full control while maintaining the shadcn/ui design system benefits.
